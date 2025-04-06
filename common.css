@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Chakra Petch', sans-serif;
+}
+
+header {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    font-style: "Chakra Petch";
+}
+
+nav {
+    background-color: #333;
+    padding: 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+footer {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.icon-btn {
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem;
+    border: 2px solid white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn i {
+    font-size: 1.2rem;
+}
+
+.icon-btn:hover {
+    background-color: white;
+    color: #1a1a1a;
+}
+
+.cinema {
+    color: white;
+    font-weight: bold;
+    font-style: "Chakra Petch";
+}
+
+.max {
+    color: #d21515;
+    font-weight: bold;
+} 

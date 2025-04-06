@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d21515;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin: 0 0 20px 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        .link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .link a {
+            color: #d21515;
+            text-decoration: none;
+        }
+        .cinema {
+    color: black;
+    font-weight: bold;
+    font-style: "Chakra Petch";
+}
+
+.max {
+    color: #d21515;
+    font-weight: bold;
+} 
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="container" id="loginForm">
+        <div class="logo">
+            <h1><span class="cinema">CINEMA</span><span class="max">MAX</span></h1>
+            <h2>Login</h2>
+        </div>
+        
+        <form action="login.php" method="POST">
+                <label>Email or Phone Number</label>
+                <input type="email" name="email" required>
+            
+                <label>Password</label>
+                <input type="password" name="password" required>
+            
+                <button type="submit" name="submit">Login</button>
+            
+            
+            <div class="link">
+                <a href="#" onclick="showRegisterForm()">Don't have an account? Register here</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Register Page -->
+    <div class="container" id="registerForm" style="display: none;">
+        <div class="logo">
+            
+            <div class="logo-text">CINEMAMAX</div>
+            <h2>Register</h2>
+        </div>
+        <form action="register.php" method="POST">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Choose Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <button type="submit" name="register">Register</button>
+            <div class="link">
+                <a href="#" onclick="showLoginForm()">Already have an account? Login here</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function showRegisterForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+        function redirectToHome() {
+            window.location.href = 'cinema_home_page.html';
+            return false;
+        }
+    </script>
+</body>
+</html>
+
+

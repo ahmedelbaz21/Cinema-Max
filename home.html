@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinemaMax Home Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="common.css">
+    <style>
+       
+        .movie-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+    
+        .movie-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: auto;
+            margin: 0;
+        }
+
+        .movie-info {
+            padding: 1rem;
+        }
+
+        .age-rating {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 3px;
+        }
+
+        .hello {
+            color: black;
+            font-weight: bold;
+            font-style: "Chakra Petch";
+        }
+        
+        .ahmed {
+            color: #d21515; 
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="home.html" class="icon-btn"><i class="fas fa-home"></i></a>
+            <h1><span class="cinema">CINEMA</span><span class="max">MAX</span></h1>
+            <a href="profile.html" class="icon-btn"><i class="fas fa-user"></i></a>
+        </div>
+    </header>
+
+    <nav>
+        <a href="home.html">Now Showing</a>
+        <a href="coming_soon.html">Coming Soon</a>
+        <a href="offers.html">Offers</a>
+        <a href="f&b.html"> Food & Beverages</a>
+        <a href="location.html"> Our Locations</a>
+        <a href="footer">Contact</a>
+    </nav>
+
+    <main>
+        <section id="now-showing">
+                <div style="margin-top: 2rem;"></div>
+                <div style="margin-left: 2rem; margin-top: 2rem;">
+                    <h2> <span class="hello">Hello </span><span class="ahmed">Ahmed!</span> </h2>
+                    <h3>
+                        Check out the movies at 
+                        <select id="locationSelect" onchange="updateLocation()">
+                            <option value="">Select Location</option>
+                            <option value="District 5 Mall">District 5 Mall</option>
+                            <option value="Arkan Plaza">Arkan Plaza</option>
+                            <option value="City Stars Mall">City Stars Mall</option>
+                            <option value="Open Air Mall">Open Air Mall</option>
+                        </select>
+                        <span id="selectedLocation" style="color: #d21515; font-weight: bold; cursor: pointer;" onclick="editLocation()"></span>!
+                    </h3>
+                </div>
+            </section>
+            
+            <script>
+                function updateLocation() {
+                    const select = document.getElementById('locationSelect');
+                    const selectedLocation = document.getElementById('selectedLocation');
+                    
+                    if (select.value) {
+                        selectedLocation.textContent = select.value;
+                        select.style.display = 'none'; 
+                        selectedLocation.style.display = 'inline'; 
+                    }
+                }
+            
+                function editLocation() {
+                    const select = document.getElementById('locationSelect');
+                    const selectedLocation = document.getElementById('selectedLocation');
+            
+                    select.style.display = 'inline'; 
+                    selectedLocation.textContent = ''; 
+                }
+
+             
+                async function loadMovies() {
+                    const response = await fetch("movies.php");
+                    const movies = await response.json();
+                    const movieList = document.getElementById("movies");
+                    movieList.innerHTML = "";
+
+                    movies.forEach(movie => {
+                        movieList.innerHTML += `
+                            <div class="movie-card">
+                                <div class="movie-poster">
+                                    <img src="movie posters/${movie.image}" alt="${movie.title}">
+                                </div>
+                                <div class="movie-info">
+                                    <h3>${movie.title}</h3>
+                                    <p>Genre: ${movie.genre}</p>
+                                    <p>Duration: ${movie.duration}</p>
+                                    <p>Rating: ${movie.rating}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                loadMovies();
+
+
+            </script>
+
+            
+                    
+            <div class="movie-container">
+                <div class="movie-card">
+                    <div class="movie-poster">
+                        <img src="movie posters/littlewomen.jpg" alt="Little Women">
+                    </div>
+                    <div class="movie-info">
+                        <h3><a href="littlewomen.html" style="text-decoration: none; color: inherit;">Little Women</a></h3>
+                        <span class="age-rating">PG-13</span>
+                        <p>Duration: 2h 15min</p>
+                        <p>Genre: Romance, Coming of age</p>
+                    </div>
+                </div>
+
+                <!-- Movie Card 2 -->
+                <div class="movie-card">
+                    <div class="movie-poster">
+                        <img src="movie posters/6days.jpg" alt="6 Days">
+                    </div>
+                    <div class="movie-info">
+                        <h3>6 Days </h3>
+                        <span class="age-rating">PG-15</span>
+                        <p>Duration: 1h 45min</p>
+                        <p>Genre: Romance, Comedy</p>
+                    </div>
+                </div>
+
+                <div class="movie-card">
+                    <div class="movie-poster">
+                        <img src="movie posters/thelionking.jpg" alt="The Lion King">
+                    </div>
+                    <div class="movie-info">
+                        <h3>The Lion KIng </h3>
+                        <span class="age-rating">G</span>
+                        <p>Duration: 2h 15min</p>
+                        <p>Genre: family, adventure</p>
+                    </div>
+                </div>
+                
+
+
+                
+                    <div class="movie-card">
+                        <div class="movie-poster">
+                            <img src="movie posters/nosferatu.jpg" alt="nosferatu">
+                        </div>
+                        <div class="movie-info">
+                            <h3>Nosferatu</h3>
+                            <span class="age-rating">18+</span>
+                            <p>Duration: 2h 15min</p>
+                            <p>Genre: horror,  scifi</p>
+                        </div>
+                    </div>
+                
+
+                    
+
+            </div>
+        </section>
+
+        
+
+        
+    </main>
+
+    <footer id="footer">
+        <div>
+            <h3>Contact Us</h3>
+            <p>HQ: Office 304 District 5, New Cairo City</p>
+            <p>Hotline: 161676</p>
+            <p>Email: info@cinemamax.com</p>
+        </div>
+        <div style="margin-top: 1rem;">
+            <p>&copy; 2025 CinemaMax. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
+

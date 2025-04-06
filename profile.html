@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinemaMax - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="common.css">
+    <style>
+            * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Chakra Petch', sans-serif;
+        }
+
+        header {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-style: "Chakra Petch";
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .home-btn, .profile-btn {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn:hover, .profile-btn:hover {
+            background-color: white;
+            color: #1a1a1a;
+        }
+
+        .cinema { color: white; font-weight: bold; }
+        .max { color: #d21515; font-weight: bold; }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .profile-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: #d21515;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #d21515;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .edit-btn {
+            background-color: #d21515;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .edit-btn:hover {
+            background-color: #b01010;
+        }
+
+        .payment-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding: 1.5rem;
+        background-color: white;
+        
+        }
+        .profile-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .profile-section {
+            flex: 1;
+        }
+
+        .right-sections {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .add-card-btn {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .icon-btn {
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem;
+            border: 2px solid white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn i {
+            font-size: 1.2rem;
+        }
+
+        .icon-btn:hover {
+            background-color: white;
+            color: #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="home.html" class="icon-btn"><i class="fas fa-home"></i></a>
+            <h1><span class="cinema">CINEMA</span><span class="max">MAX</span></h1>
+            <a href="profile.html" class="icon-btn"><i class="fas fa-user"></i></a>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <div class="profile-section">
+            <h2 class="section-title">Personal Information</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">First Name</label>
+                    <input type="text" id="name" value="Ahmed" required>
+                </div>
+                <div class="form-group">
+                    <label for="name">Last Name</label>
+                    <input type="text" id="name" value="Elbaz" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" value="ahmed.elbaz@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" value="+201000505097" required>
+                </div>
+                <button type="submit" class="edit-btn">Save Changes</button>
+            </form>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">Preferred Location</h2>
+            <form>
+                <div class="form-group">
+                    <label for="location">Default Cinema Location</label>
+                    <select id="location" required>
+                        <option value="">Select Location</option>   
+                        <option value="District 5 Mall">District 5 Mall</option>
+                        <option value="Arkan Plaza">Arkan Plaza</option>
+                        <option value="City Stars Mall">City Stars Mall</option>
+                        <option value="Open Air Mall">Open Air Mall</option>
+                    </select>
+                    <script>
+                        function updateLocation() {
+                            const select = document.getElementById('locationSelect');
+                            const selectedLocation = document.getElementById('selectedLocation');
+                            
+                            if (select.value) {
+                                selectedLocation.textContent = select.value;
+                                select.style.display = 'none'; 
+                                selectedLocation.style.display = 'inline'; 
+                            }
+                        }
+                    
+                        function editLocation() {
+                            const select = document.getElementById('locationSelect');
+                            const selectedLocation = document.getElementById('selectedLocation');
+                    
+                            select.style.display = 'inline'; // Show dropdown again
+                            selectedLocation.textContent = ''; // Clear text
+                        }
+                    </script>
+                </div>
+                <button type="submit" class="edit-btn">Save Location</button>
+            </form>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">Payment Methods</h2>
+            <div class="payment-card">
+                <h3>Visa ending in 4582</h3>
+                <p>Expires: 12/25</p>
+                <button class="edit-btn">Remove</button>
+            </div>
+            <div class="payment-card">
+                <h3>Mastercard ending in 7890</h3>
+                <p>Expires: 09/24</p>
+                <button class="edit-btn">Remove</button>
+            </div>
+            <button class="add-card-btn">+ Add New Card</button>
+        </div>
+    </div>
+</body>
+</html> 
