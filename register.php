@@ -15,6 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
         echo "Passwords do not match.";
         exit();
     }
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
 
     // Check if email already exists
     $check_sql = "SELECT * FROM users WHERE email='$email'";
@@ -25,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
     } else {
         // Insert new user into the database
         $sql = "INSERT INTO users (first_name, last_name, email, phone, dob, password) 
-                VALUES ('$firstName', '$lastName', '$email', '$phone', '$dob', '$password')";
+                VALUES ('$firstName', '$lastName', '$email', '$phone', '$dob', '$hashedPassword')";
         
         if ($conn->query($sql) === TRUE) {
             echo "Registration successful! Redirecting to login...";

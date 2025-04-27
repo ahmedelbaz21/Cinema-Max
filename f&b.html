@@ -3,33 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CinemaMax - [Page Title]</title>
+    <title>CinemaMax - Food and Beverages </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="common.css">
     <style>
-        
+           h2 {
+      border-bottom: 2px solid #d21515;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .menu-item {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+    .menu-item:hover {
+      transform: scale(1.02);
+    }
+    .menu-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .menu-content {
+      padding: 1rem;
+    }
+    .menu-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .menu-desc {
+      font-size: 0.9rem;
+      margin: 0.5rem 0;
+    }
+    .menu-price {
+      color: #d21515;
+      font-weight: bold;
+    }
     </style>
 </head>
 <body>
     <header>
         <div class="header-container">
-            <a href="home.html" class="icon-btn"><i class="fas fa-home"></i></a>
+            <a href="home.php" class="icon-btn"><i class="fas fa-home"></i></a>
             <h1><span class="cinema">CINEMA</span><span class="max">MAX</span></h1>
-            <a href="profile.html" class="icon-btn"><i class="fas fa-user"></i></a>
+            <a href="profile.php" class="icon-btn"><i class="fas fa-user"></i></a>
         </div>
     </header>
 
     <nav>
-        <a href="home.html">Now Showing</a>
+        <a href="home.php">Now Showing</a>
         <a href="coming_soon.html">Coming Soon</a>
         <a href="offers.html">Offers</a>
         <a href="f&b.html">Food & Beverages</a>
         <a href="location.html">Our Locations</a>
-        <a href="footer">Contact</a>
+        <a href="#footer">Contact</a>
     </nav>
 
     <body>
-        <h1>pre order your movie snacks online!</h1>
+        
+        <div class="container">
+            <h2>Popular Combos</h2>
+            <div class="menu-grid">
+              <div class="menu-item">
+                <img src="FB/popcorn combo.jpg" alt="Popcorn Combo">
+                <div class="menu-content">
+                  <div class="menu-title">Classic Popcorn Combo</div>
+                  <div class="menu-desc">Large popcorn + 2 soft drinks</div>
+                  <div class="menu-price"> 300 L.E</div>
+                </div>
+              </div>
+              <div class="menu-item">
+                <img src="https://via.placeholder.com/300x180?text=Nachos+Combo" alt="Nachos Combo">
+                <div class="menu-content">
+                  <div class="menu-title">Nacho Lovers Combo</div>
+                  <div class="menu-desc">Cheesy nachos + drink of your choice</div>
+                  <div class="menu-price">250 L.E</div>
+                </div>
+              </div>
+            </div>
+        
+            <h2>Drinks</h2>
+            <div class="menu-grid">
+              <div class="menu-item">
+                <img src="FB/cola.png" alt="Soda">
+                <div class="menu-content">
+                  <div class="menu-title">Coca-Cola </div>
+                  <div class="menu-desc">Refreshing cold drink</div>
+                  <div class="menu-price">40 L.E</div>
+                </div>
+              </div>
+              <div class="menu-item">
+                <img src="" alt="Sprite">
+                <div class="menu-content">
+                  <div class="menu-title">Sprite</div>
+                  <div class="menu-desc">Chilled brewed iced tea</div>
+                  <div class="menu-price">40 L.E</div>
+                </div>
+              </div>
+              <div class="menu-item">
+                <img src="" alt="Fanta">
+                <div class="menu-content">
+                  <div class="menu-title">Fanta</div>
+                  <div class="menu-desc">Chilled brewed iced tea</div>
+                  <div class="menu-price">40 L.E</div>
+                </div>
+              </div>
+              <div class="menu-item">
+                <img src="" alt="Redbull ">
+                <div class="menu-content">
+                  <div class="menu-title">Redbull</div>
+                  <div class="menu-desc">Chilled brewed iced tea</div>
+                  <div class="menu-price">100 L.E</div>
+                </div>
+              </div>
+
+              <div class="menu-item">
+                <img src="https://via.placeholder.com/300x180?text=Iced+Tea" alt="Iced Tea">
+                <div class="menu-content">
+                  <div class="menu-title">Peach Iced Tea</div>
+                  <div class="menu-desc">Chilled brewed iced tea</div>
+                  <div class="menu-price">80 L.E</div>
+                </div>
+              </div>
+
+              <div class="menu-item">
+                <img src="https://via.placeholder.com/300x180?text=Iced+Tea" alt="Iced Tea">
+                <div class="menu-content">
+                  <div class="menu-title">Slushie</div>
+                  <div class="menu-desc">Chilled brewed iced tea</div>
+                  <div class="menu-price">80 L.E</div>
+                </div>
+              </div>
+            </div>
+          
+        
+            <h2>Snacks</h2>
+            <div class="menu-grid">
+              <div class="menu-item">
+                <img src="https://via.placeholder.com/300x180?text=Hotdog" alt="Hotdog">
+                <div class="menu-content">
+                  <div class="menu-title"> Hotdog</div>
+                  <div class="menu-desc">Grilled beef hotdog with ketchup & mustard</div>
+                  <div class="menu-price">100 L.E</div>
+                </div>
+              </div>
+              <div class="menu-item">
+                <img src="https://via.placeholder.com/300x180?text=Popcorn" alt="Popcorn">
+                <div class="menu-content">
+                  <div class="menu-title">Butter Popcorn (Large)</div>
+                  <div class="menu-desc">Classic buttered movie popcorn</div>
+                  <div class="menu-price">180 L.E</div>
+                </div>
+              </div>
+            </div>
+          </div>
     </body>
 
     <footer id="footer">

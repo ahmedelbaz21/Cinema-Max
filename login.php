@@ -3,12 +3,12 @@ session_start();
 include('db_connect.php');
 
 if (isset($_POST['submit'])) {
-    $email = $_POST['email']; // Updated to match the form input name
+    $loginInput = $_POST['login_input']; 
     $password = $_POST['password'];
 
-    // Corrected SQL query
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? LIMIT 1"); 
-    $stmt->bind_param("s", $email);  
+   
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR phone = ? LIMIT 1");
+    $stmt->bind_param("ss", $loginInput, $loginInput);  
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -18,15 +18,18 @@ if (isset($_POST['submit'])) {
         if (password_verify($password, $user['password'])) {
             $_SESSION['username'] = $user['username'];
             $_SESSION['user_id'] = $user['id'];
-            
-            // Correct redirection
-            header("Location: home.html"); 
-            exit; 
+            $_SESSION['first_name'] = $user['first_name'];
+            $_SESSION['last_name'] = $user['last_name'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['payment_method'] = $user['payment_method']; 
+
+            header("Location: home.php");
+            exit;
         } else {
             echo "Invalid password!";
         }
     } else {
-        echo "No user found with that email!";
+        echo "No user found with that email or phone!";
     }
 
     $stmt->close();
