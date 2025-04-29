@@ -2,14 +2,13 @@
     include "db_connect.php";
     session_start();
 
-    
     $result = $conn->query("SELECT * FROM movies");
     $movies = [];
     while ($row = $result->fetch_assoc()) {
         $movies[] = $row;
     }
     $conn->close();
-    ?>
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +24,6 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             padding: 2rem;
-            width: 100%;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -36,7 +34,6 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            width: 100%;
             transition: transform 0.3s ease-in-out;
         }
 
@@ -71,7 +68,6 @@
             color: #555;
         }
 
-        
         .modal {
             display: none;
             position: fixed;
@@ -100,7 +96,7 @@
             cursor: pointer;
         }
 
-        input, button {
+        input, button, textarea, select {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
@@ -125,6 +121,16 @@
             color: white;
             border-radius: 3px;
         }
+
+        .analysis-btn {
+            display: inline-block;
+            margin-top: 10px;
+            color: white;
+            background: #2980b9;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -136,8 +142,8 @@
 
 <nav>
     <a href="AdminHome.php">Now Showing</a>
-    <a href="Admin_coming_soon.html">Coming Soon</a>
-    <a href="Adminoffers.html">Offers</a>
+    <a href="admin_coming_soon.php" class="active">Coming Soon</a>
+    <a href="Admin_Offers.php">Offers</a>
     <a href="AdminF&B.php">Food & Beverages</a>
 </nav>
 
@@ -188,18 +194,18 @@
                     const movieCard = document.createElement("div");
                     movieCard.classList.add("movie-card");
                     movieCard.innerHTML = `
-                        
                         <div class="movie-poster">
                             <img src="movie%20posters/${movie.title}.jpg?ts=${Date.now()}" alt="${movie.title}">
                         </div>
                         <div class="movie-info">
                             <h3>${movie.title}</h3>
                             <p>Genre: ${movie.genre}</p>
-                            <p>Duration: ${movie.duration}</p>
-                            <span class="age-rating"> ${movie.rating}</span>
-                            
+                            <p>Duration: ${movie.duration} mins</p>
+                            <span class="age-rating">${movie.rating}</span><br>
+                            <a class="analysis-btn" href="analysis.php?movie_id=${movie.id}">View Analysis</a>
                         </div>
                         <div class="edit-icon" onclick="editMovie(${movie.id})">✎</div>
+                        <div class="delete-icon" onclick="deleteMovie(${movie.id}, this)">🗑️ Delte This Movie </div>
                     `;
                     movieList.insertBefore(movieCard, document.getElementById("addMovie"));
                 });
@@ -208,7 +214,6 @@
                 alert("Request failed.");
                 console.error("Fetch error:", err);
             });
-
     }
 
     function saveMovie() {
@@ -249,7 +254,6 @@
         }
     }
 
-
     function editMovie(id) {
         fetch(`movies.php?id=${id}`)
             .then(res => res.json())
@@ -259,8 +263,7 @@
                 document.getElementById("genre").value = movie.genre;
                 document.getElementById("duration").value = movie.duration;
                 document.getElementById("rating").value = movie.rating;
-                document.getElementById("cast").value = movie.cast;
-                document.getElementById("description").value = movie.description;
+                document.getElementById("cast").value
 
                 openModal();
             })
@@ -269,7 +272,28 @@
                 alert("Failed to load movie details.");
                 console.error("Fetch error:", err);
             });
+    }
+
+    function deleteMovie(id, element) {
+        if (confirm("Are you sure you want to delete this movie?")) {
+            fetch(`movies.php?id=${id}`, { method: "DELETE" })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("Movie deleted successfully!");
+                        const movieCard = element.parentElement;
+                        movieCard.remove(); // Remove the movie card from the view
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                })
+                .catch(err => {
+                    alert("Failed to delete movie.");
+                    console.error("Fetch error:", err);
+                });
         }
+    }
+
 </script>
 
 </body>

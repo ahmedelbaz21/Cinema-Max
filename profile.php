@@ -72,6 +72,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['fname'])) {
   exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['form_type'] === 'submit_review') {
+  $userId = $_SESSION['user_id'];
+  $movie_id = intval($_POST['movie_id']);
+  $rating = intval($_POST['rating']);
+  $comment = trim($_POST['comment']);
+
+  $insert_stmt = $conn->prepare("INSERT INTO reviews (user_id, movie_id, rating, comment) VALUES (?, ?, ?, ?)");
+  $insert_stmt->bind_param("iiis", $userId, $movie_id, $rating, $comment);
+  $insert_stmt->execute();
+  $insert_stmt->close();
+
+  // Refresh the page to show the new review
+  header("Location: profile.php");
+  exit();
+}
+
+
+
 // Fetch user info
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $userId);
@@ -191,66 +209,67 @@ $stmt->close();
     }
 
     .credit-card-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
 
-.credit-card {
-    width: 340px;
-    height: 200px;
-    background: linear-gradient(to bottom right,#d21515, #1a1a1a);
-    color: white;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-}
+    .credit-card {
+        width: 340px;
+        height: 200px;
+        background: linear-gradient(to bottom right,#d21515, #1a1a1a);
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
 
-.credit-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    .credit-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.card-logo-img {
-    width: 40px;
-    height: auto;
-}
+    .card-logo-img {
+        width: 40px;
+        height: auto;
+    }
 
-.card-type {
-    font-size: 14px;
-    font-weight: bold;
-}
+    .card-type {
+        font-size: 14px;
+        font-weight: bold;
+    }
 
-.credit-card-body {
-    margin-top: 40px;
-    text-align: left;
-}
+    .credit-card-body {
+        margin-top: 40px;
+        text-align: left;
+    }
 
-.card-number {
-    font-size: 22px;
-    letter-spacing: 2px;
-}
+    .card-number {
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
 
-.card-name {
-    margin-top: 10px;
-    font-size: 16px;
-    text-transform: uppercase;
-}
+    .card-name {
+        margin-top: 10px;
+        font-size: 16px;
+        text-transform: uppercase;
+    }
 
-.card-expiry {
-    margin-top: 10px;
-    font-size: 14px;
-}
+    .card-expiry {
+        margin-top: 10px;
+        font-size: 14px;
+    }
 
-.credit-card:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
-}
+    .credit-card:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
 
+    
   </style>
 </head>
 <body>
@@ -393,68 +412,103 @@ $stmt->close();
             ?>
       </div>
     </div>
+<div id="history" class="tab-content">
+  <h2 class="section-title">Purchase History</h2>
+  <?php
+    $stmt = $conn->prepare("
+      SELECT t.*, m.title AS movie_title, m.poster AS movie_poster 
+      FROM tickets t 
+      JOIN movies m ON t.movie_id = m.id 
+      WHERE t.user_id = ? 
+      ORDER BY t.booking_datetime DESC
+    ");
+  
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    <div id="history" class="tab-content">
-      <h2 class="section-title">Purchase History</h2>
-      <?php
-       $stmt = $conn->prepare("
-        SELECT t.*, m.title AS movie_title, m.poster AS movie_poster 
-        FROM tickets t 
-        JOIN movies m ON t.movie_id = m.id 
-        WHERE t.user_id = ? 
-        ORDER BY t.booking_datetime DESC
-        ");
-   
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+      echo "<div style='display: flex; flex-wrap: wrap; gap: 20px;'>";
 
-        if ($result->num_rows > 0) {
-          echo "<div style='display: flex; flex-wrap: wrap; gap: 20px;'>";
-              while ($row = $result->fetch_assoc()) {
-                $movie = $row['movie_id']; // optional if you want to fetch movie name again
-                $datetime = date("M d, Y - H:i", strtotime($row['booking_datetime']));
-                $seats = htmlspecialchars($row['seats']);
-                $location = htmlspecialchars($row['location']);
-                $amount = number_format($row['amount_paid'], 2);
-                $payment = htmlspecialchars($row['payment_method']);
-                $movie_title = htmlspecialchars($row['movie_title']);
-                $poster = rawurlencode($row['movie_title']) . '.jpg';
+      while ($row = $result->fetch_assoc()) {
+        $movie = $row['movie_id'];
+        $datetime = date("M d, Y - H:i", strtotime($row['booking_datetime']));
+        $seats = htmlspecialchars($row['seats']);
+        $location = htmlspecialchars($row['location']);
+        $amount = number_format($row['amount_paid'], 2);
+        $payment = htmlspecialchars($row['payment_method']);
+        $movie_title = htmlspecialchars($row['movie_title']);
+        $poster = rawurlencode($row['movie_title']) . '.jpg';
 
-            
-                // Rebuild QR data and URL
-                $qr_data = urlencode("DateTime: {$datetime}, Seats: {$seats}, Location: {$location}");
-                $qr_url = "https://api.qrserver.com/v1/create-qr-code/?data={$qr_data}&size=150x150";
-            
-                echo "
-                <div style='display: flex; gap: 20px; border: 1px solid #ccc; border-radius: 10px; padding: 20px; margin-bottom: 20px; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1);'>
-                    <div style='flex: 0 0 120px;'>
-                       <img src='movie%20posters/$poster' alt='Movie Poster' style='width: 120px; height: auto; border-radius: 8px;'>
-                    </div>
-                    <div style='flex: 1;'>
-                        <h3 style='margin-top: 0;'>🎬 $movie_title</h3>
-                        <p><strong> Date & Time:</strong> $datetime</p>
-                        <p><strong> Seats:</strong> $seats</p>
-                        <p><strong> Location:</strong> $location</p>
-                        <p><strong> Amount Paid:</strong> EGP $amount</p>
-                        <p><strong>Payment Method:</strong> $payment</p>
-                        <div>
-                            <strong> QR Code:</strong><br>
-                            <img src='$qr_url' alt='QR Code' style='margin-top: 8px;'>
-                        </div>
-                    </div>
-                </div>
-                ";}
-            echo "</div>";
-          
-            
+        $qr_data = urlencode("DateTime: {$datetime}, Seats: {$seats}, Location: {$location}");
+        $qr_url = "https://api.qrserver.com/v1/create-qr-code/?data={$qr_data}&size=150x150";
+
+        echo "
+        <div style='display: flex; gap: 20px; border: 1px solid #ccc; border-radius: 10px; padding: 20px; margin-bottom: 20px; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1);'>
+          <div style='flex: 0 0 120px;'>
+            <img src='movie%20posters/$poster' alt='Movie Poster' style='width: 120px; height: auto; border-radius: 8px;'>
+          </div>
+          <div style='flex: 1;'>
+            <h3 style='margin-top: 0;'>🎬 $movie_title</h3>
+            <p><strong> Date & Time:</strong> $datetime</p>
+            <p><strong> Seats:</strong> $seats</p>
+            <p><strong> Location:</strong> $location</p>
+            <p><strong> Amount Paid:</strong> EGP $amount</p>
+            <p><strong>Payment Method:</strong> $payment</p>
+            <div>
+              <strong> QR Code:</strong><br>
+              <img src='$qr_url' alt='QR Code' style='margin-top: 8px;'>
+            </div>
+        ";
+
+        // ✅ OUTSIDE echo, check reviews
+        $review_stmt = $conn->prepare("SELECT * FROM reviews WHERE user_id = ? AND movie_id = ?");
+        $review_stmt->bind_param("ii", $userId, $movie);
+        $review_stmt->execute();
+        $review_result = $review_stmt->get_result();
+        $existing_review = $review_result->fetch_assoc();
+        $review_stmt->close();
+
+        if ($existing_review) {
+          echo "
+            <div style='margin-top: 10px;'>
+              <p><strong>⭐ Your Rating:</strong> " . htmlspecialchars($existing_review['rating']) . "/5</p>
+              <p><strong>📝 Comment:</strong> " . nl2br(htmlspecialchars($existing_review['comment'])) . "</p>
+            </div>
+          ";
         } else {
-            echo "<p>You haven't booked any tickets yet.</p>";
+          echo "
+            <form method='POST' action='profile.php' style='margin-top: 10px;'>
+              <input type='hidden' name='form_type' value='submit_review'>
+              <input type='hidden' name='movie_id' value='" . htmlspecialchars($movie) . "'>
+              <div class='form-group'>
+                <label for='rating_$movie'>Rating (1-5)</label><br>
+                <input type='number' id='rating_$movie' name='rating' min='1' max='5' required style='width: 80px;'>
+              </div>
+              <div class='form-group' style='margin-top: 8px;'>
+                <label for='comment_$movie'>Comment</label><br>
+                <textarea id='comment_$movie' name='comment' rows='3' style='width: 100%;' required></textarea>
+              </div>
+              <button type='submit' style='margin-top: 10px; padding: 8px 12px; background-color: #d21515; color: white; border: none; border-radius: 4px;'>Submit Review</button>
+            </form>
+          ";
         }
-        $stmt->close();
-      ?>
 
-    </div>
+        echo "
+          </div> <!-- flex 1 close -->
+        </div> <!-- ticket card close -->
+        ";
+      } // ✅ THIS closes the while loop correctly!
+
+      echo "</div>"; // close flex-wrap container
+    } else {
+      echo "<p>You haven't booked any tickets yet.</p>";
+    }
+
+    $stmt->close();
+  ?>
+</div>
+
 
     <div style="text-align: center; margin-top: 2rem;">
       <a href="login.html" style="display: inline-block; padding: 10px 20px; background-color: #ff4444; color: white; text-decoration: none; border-radius: 5px;">Logout</a>

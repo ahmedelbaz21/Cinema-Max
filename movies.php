@@ -4,7 +4,7 @@ include "db_connect.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     if (isset($_GET["id"])) {
-        $id = intval($_GET["movie_id"]);
+        $id = intval($_GET["id"]);
         $stmt = $conn->prepare("SELECT * FROM movies WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -65,3 +65,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
 }
 
+if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
+    // Try to get id from URL first
+    if (isset($_GET['id'])) {
+        $id = intval($_GET['id']);
+    } else {
+        parse_str(file_get_contents("php://input"), $_DELETE);
+        $id = intval($_DELETE["id"] ?? 0);
+    }
+
+    if ($id > 0) {
+        $stmt = $conn->prepare("DELETE FROM movies WHERE id = ?");
+        $stmt->bind_param("i", $id);
+
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success"]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["status" => "error", "message" => $stmt->error]);
+        }
+
+        $stmt->close();
+    } else {
+        http_response_code(400);
+        echo json_encode(["status" => "error", "message" => "Invalid movie ID"]);
+    }
+
+    $conn->close();
+    exit;
+}
+
+
+?>

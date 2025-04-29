@@ -75,8 +75,8 @@
 
     <nav>
         <a href="home.php">Now Showing</a>
-        <a href="coming_soon.html">Coming Soon</a>
-        <a href="offers.html">Offers</a>
+        <a href="user_coming_soon.php">Coming Soon</a>
+        <a href="offers.php">Offers</a>
         <a href="f&b.html"> Food & Beverages</a>
         <a href="location.html"> Our Locations</a>
         <a href="#footer">Contact</a>
