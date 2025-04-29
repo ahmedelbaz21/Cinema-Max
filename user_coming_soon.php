@@ -1,7 +1,7 @@
 <?php
 include "db_connect.php";
 
-// Fetch all movies
+
 $result = $conn->query("SELECT * FROM coming_movies ORDER BY release_date ASC");
 $movies = [];
 if ($result) {

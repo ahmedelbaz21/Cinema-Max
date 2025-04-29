@@ -2,7 +2,7 @@
 include "db_connect.php";
 session_start();
 
-// Function to check for movies releasing tomorrow and notify admins
+
 function checkMoviesReleasingTomorrow($conn) {
     $tomorrow = date('Y-m-d', strtotime('+1 day'));
     $stmt = $conn->prepare("SELECT title FROM coming_movies WHERE release_date = ?");
@@ -16,7 +16,7 @@ function checkMoviesReleasingTomorrow($conn) {
         $movieTitles = array_column($movies, 'title');
         $notification = "ALERT: The following movies are releasing tomorrow: " . implode(", ", $movieTitles);
         
-        // Update all admin notifications
+        
         $updateStmt = $conn->prepare("UPDATE Admins SET pending_notifications = ?");
         $updateStmt->bind_param("s", $notification);
         $updateStmt->execute();
@@ -25,7 +25,7 @@ function checkMoviesReleasingTomorrow($conn) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Handle delete first
+  
     if (isset($_POST['delete_id'])) {
         $id = intval($_POST['delete_id']);
         $stmt = $conn->prepare("DELETE FROM coming_movies WHERE id=?");
@@ -49,23 +49,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $rating = trim($_POST['rating']);
     $release_date = $_POST['release_date'];
 
-    // Validate inputs
+   
     if (empty($title) || empty($genre) || empty($duration) || empty($rating) || empty($release_date)) {
         $_SESSION['error'] = "All fields are required";
     } else {
         if ($id > 0) {
-            // Update existing movie
+            
             $stmt = $conn->prepare("UPDATE coming_movies SET title=?, genre=?, duration=?, rating=?, release_date=? WHERE id=?");
             $stmt->bind_param("ssissi", $title, $genre, $duration, $rating, $release_date, $id);
         } else {
-            // Insert new movie
+          
             $stmt = $conn->prepare("INSERT INTO coming_movies (title, genre, duration, rating, release_date) VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param("ssiss", $title, $genre, $duration, $rating, $release_date);
         }
 
         if ($stmt->execute()) {
             $_SESSION['success'] = "Movie " . ($id > 0 ? "updated" : "added") . " successfully!";
-            // Check for movies releasing tomorrow after each update/insert
+        
             checkMoviesReleasingTomorrow($conn);
         } else {
             $_SESSION['error'] = "Database error: " . $conn->error;
@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
 }
 
-// Check for notifications on page load
+
 checkMoviesReleasingTomorrow($conn);
 
 $movies = [];
@@ -86,13 +86,13 @@ if ($result) {
     $result->free();
 }
 
-// Get admin notification
+
 $notification = null;
 $notificationResult = $conn->query("SELECT pending_notifications FROM Admins LIMIT 1");
 if ($notificationResult && $notificationResult->num_rows > 0) {
     $row = $notificationResult->fetch_assoc();
     $notification = $row['pending_notifications'];
-    // Clear the notification after displaying
+
     $conn->query("UPDATE Admins SET pending_notifications = NULL");
 }
 $notificationResult->free();
@@ -279,7 +279,7 @@ $conn->close();
 <nav>
     <a href="AdminHome.php">Now Showing</a>
     <a href="admin_coming_movies.php" class="active">Coming Soon</a>
-    <a href="Adminoffers.html">Offers</a>
+    <a href="Admin_offers.php">Offers</a>
     <a href="AdminF&B.php">Food & Beverages</a>
 </nav>
 

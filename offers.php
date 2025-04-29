@@ -1,17 +1,17 @@
 <?php
-// Database connection
+
 require_once 'db_connect.php';
 
-// Function to get bank logo based on bank name
+
 function getBankLogo($bank_name) {
     $bank_logos = [
         'CIB' => 'cib.jpg',
         'Banque Misr' => 'Banque_Misr.jpg',
-        // Add more banks and their logos as needed
-        'default' => 'default_bank.jpg' // Fallback image
+        
+        'default' => 'default_bank.jpg'
     ];
     
-    // Clean the bank name and check for matches
+  
     $clean_name = trim($bank_name);
     foreach ($bank_logos as $key => $logo) {
         if (strcasecmp($clean_name, $key) === 0) {
@@ -22,12 +22,11 @@ function getBankLogo($bank_name) {
     return $bank_logos['default'];
 }
 
-// Check connection
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch offers
 $sql = "SELECT o.*, GROUP_CONCAT(l.name SEPARATOR ', ') as location_names 
         FROM offers o 
         LEFT JOIN locations l ON FIND_IN_SET(l.id, o.location_id) 

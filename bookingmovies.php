@@ -1,17 +1,17 @@
 <?php session_start();
 include "db_connect.php";
 
-// $data = json_decode(file_get_contents("php://input"), true);
+
 
 $movie_id = intval($_GET['movie_id']);
 if (!$movie_id) {
     die("No movie selected.");
 }
 
-error_log("Date: " . $date);
 
 
-// Fetch movie details
+
+
 $stmt = $conn->prepare("SELECT * FROM movies WHERE id = ?");
 $stmt->bind_param("i", $movie_id);
 $stmt->execute();
@@ -267,7 +267,8 @@ while ($row = $result->fetch_assoc()) {
                 <?php
                     $posterFile = rawurlencode($movie['title']) . '.jpg';
                 ?>
-                <img src="movie%20posters/<?php echo $posterFile; ?>?ts=${Date.now()}" 
+               <img src="movie%20posters/<?php echo $posterFile; ?>?ts=<?php echo time(); ?>" 
+
                 alt="<?php echo htmlspecialchars($movie['title']); ?>"
                 onerror="this.onerror=null; this.src='movie%20posters/default.jpg';">
 
@@ -278,7 +279,7 @@ while ($row = $result->fetch_assoc()) {
                     <p><strong>Age Rating:</strong> <?php echo htmlspecialchars($movie['rating']); ?></p>
                     <p><strong>Cast:</strong> <?php
                         $cast = explode(',', $movie['cast']);
-                        echo htmlspecialchars(trim($cast[0])); // Show first cast member inline
+                        echo htmlspecialchars(trim($cast[0])); 
                     ?></p>
                     <?php
                         for ($i = 1; $i < count($cast); $i++) {
@@ -510,10 +511,10 @@ while ($row = $result->fetch_assoc()) {
                                 btn.classList.add("active");
                                 selectedShowtime = time;
 
-                                // Reset seatMap
+                                
                                 seatMap[selectedShowtime] = Array(rows).fill().map(() => Array(cols).fill(false));
 
-                                // Fetch booked seats for this showtime
+                               
                                 fetch(`fetch_booked_seats.php?movie_id=${movieId}&location=${encodeURIComponent(location)}&date=${date}&showtime=${selectedShowtime}`)
                                     .then(res => res.json())
                                     .then(bookedSeats => {
@@ -524,7 +525,7 @@ while ($row = $result->fetch_assoc()) {
                                                 seatMap[selectedShowtime][row][col] = "occupied";
                                             }
                                         });
-                                        renderSeats(); // Render after populating occupied
+                                        renderSeats(); 
                                     });
                             });
 
@@ -533,7 +534,7 @@ while ($row = $result->fetch_assoc()) {
                     });
             }
 
-            // Trigger on page load if default values exist
+            
             if (locationSelect.value && dateSelect.options.length > 0) {
                 dateSelect.selectedIndex = 0;
                 fetchShowtimes();
@@ -543,7 +544,7 @@ while ($row = $result->fetch_assoc()) {
             
 
             document.getElementById("checkoutForm").addEventListener("submit", function(e) {
-            e.preventDefault(); // Prevent form default behavior
+            e.preventDefault(); 
             console.log("Form is being submitted");
 
             const selectedLocation = document.getElementById("locationSelect").value;
@@ -561,7 +562,7 @@ while ($row = $result->fetch_assoc()) {
 
                 const orderData = {
                     movie_id: <?php echo $movie_id; ?>,
-                    email: <?php echo $user_email; ?>,
+                    email: "<?php echo htmlspecialchars($user_email); ?>",
                     location: selectedLocation,
                     showtime: selectedShowtime,
                     date: selectedDate,
@@ -577,9 +578,9 @@ while ($row = $result->fetch_assoc()) {
                         },
                         body: JSON.stringify(orderData)
                     })
-                    .then(res => res.text()) // ← Use .text() instead of .json()
+                    .then(res => res.text()) 
                     .then(data => {
-                        console.log("Raw response:", data); // Check if it's valid JSON
+                        console.log("Raw response:", data); 
                         try {
                             const parsed = JSON.parse(data);
                             if (parsed.success) {

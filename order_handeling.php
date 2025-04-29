@@ -14,7 +14,7 @@ use PHPMailer\PHPMailer\Exception;
 
 
 
-// Parse incoming JSON data
+
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!$data) {
@@ -24,7 +24,7 @@ if (!$data) {
 
 $selectedCard = $data['card_number'] ?? '';
 
-// Extract variables
+
 $movie_id = intval($data['movie_id']);
 $location = $data['location'] ?? '';
 $showtime = $data['showtime'] ?? '';
@@ -32,10 +32,10 @@ $date = $data['date'] ?? '';
 $seats = is_array($data['seats']) ? implode(',', $data['seats']) : $data['seats'];
 $amount_paid = floatval($data['amount_paid'] ?? 0);
 
-// Get user session details
+
 $user_id = $_SESSION['user_id'] ?? 0;
 $email = $_SESSION['email'];
-// Fetch user's email and selected card
+
 $stmt = $conn->prepare("
     SELECT u.email, RIGHT(c.card_number, 4) AS last_four_digits
     FROM users u
@@ -66,10 +66,10 @@ if ($result && $result->num_rows > 0) {
     $movie_name = $movie['title'];
 }
 
-// Format date + time
+
 $booking_datetime = "$date";
 
-// Insert ticket into DB
+
 $stmt = $conn->prepare("INSERT INTO tickets (user_id, movie_id, payment_method, seats, amount_paid, booking_datetime, showtime, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     if ($stmt === false) {
         die('MySQL prepare error: ' . $conn->error);
@@ -83,11 +83,11 @@ $stmt->bind_param("iissdsss", $user_id, $movie_id, $payment_method, $seats, $amo
 $stmt->close();
 $conn->close();
 
-// Generate QR code
+
 $ticket_data = urlencode("Movie: $movie_name, DateTime: $booking_datetime, Seats: $seats, Location: $location");
 $qr_code_url = "https://api.qrserver.com/v1/create-qr-code/?data=$ticket_data&size=150x150";
 
-// Send confirmation email
+
 $mail = new PHPMailer(true);
 try {
     $mail->isSMTP();

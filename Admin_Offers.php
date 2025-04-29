@@ -1,15 +1,14 @@
 <?php
-// Start session and check admin privileges
+
 session_start();
 
-// Database connection
+
 require_once 'db_connect.php';
 
-// Handle delete operation FIRST
 if (isset($_POST['delete_offer'])) {
-    $offer_id = intval($_POST['offer_id']); // prevent SQL injection
+    $offer_id = intval($_POST['offer_id']); 
 
-    // Use prepared statement for better security
+
     $stmt = $conn->prepare("DELETE FROM offers WHERE id = ?");
     $stmt->bind_param("i", $offer_id);
     
@@ -26,16 +25,16 @@ if (isset($_POST['delete_offer'])) {
     exit();
 }
 
-// Function to get bank logo based on bank name
+
 function getBankLogo($bank_name) {
     $bank_logos = [
         'CIB' => 'cib.jpg',
         'Banque Misr' => 'Banque_Misr.jpg',
-        // Add more banks and their logos as needed
-        'default' => 'default_bank.jpg' // Fallback image
+       
+        'default' => 'default_bank.jpg' 
     ];
     
-    // Clean the bank name and check for matches
+    
     $clean_name = trim($bank_name);
     foreach ($bank_logos as $key => $logo) {
         if (strcasecmp($clean_name, $key) === 0) {
@@ -46,17 +45,17 @@ function getBankLogo($bank_name) {
     return $bank_logos['default'];
 }
 
-// Handle form submission for adding new offers
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_offer'])) {
     $bank_name = $_POST['bank_name'];
     $offer_text = $_POST['offer_text'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
     
-    // Get selected locations as an array and convert to comma-separated string
+    
     $location_ids = implode(',', $_POST['location_ids']);
     
-    // Insert into database
+
     $stmt = $conn->prepare("INSERT INTO offers (bank_name, offer_text, start_date, end_date, location_id) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $bank_name, $offer_text, $start_date, $end_date, $location_ids);
     
@@ -73,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_offer'])) {
     exit();
 }
 
-// Display messages if they exist
+
 if (isset($_SESSION['message'])) {
     $message = $_SESSION['message'];
     $message_type = $_SESSION['message_type'];
@@ -81,7 +80,7 @@ if (isset($_SESSION['message'])) {
     unset($_SESSION['message_type']);
 }
 
-// Fetch existing offers - need to modify this query to handle multiple locations
+
 $offers_query = "SELECT o.*, GROUP_CONCAT(l.name SEPARATOR ', ') as location_names 
                  FROM offers o 
                  LEFT JOIN locations l ON FIND_IN_SET(l.id, o.location_id) 
@@ -89,7 +88,7 @@ $offers_query = "SELECT o.*, GROUP_CONCAT(l.name SEPARATOR ', ') as location_nam
                  ORDER BY o.start_date DESC";
 $offers_result = $conn->query($offers_query);
 
-// Fetch locations for checklist
+
 $locations_query = "SELECT * FROM locations";
 $locations_result = $conn->query($locations_query);
 ?>
@@ -178,7 +177,7 @@ $locations_result = $conn->query($locations_query);
             font-weight: bold;
         }
 
-        /* Admin specific styles */
+     
         .admin-container {
             max-width: 1400px;
             margin: 2rem auto;
@@ -301,7 +300,6 @@ $locations_result = $conn->query($locations_query);
             cursor: pointer;
         }
 
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -376,12 +374,12 @@ $locations_result = $conn->query($locations_query);
             gap: 1rem;
         }
 
-        /* Style for the delete form container */
+       
         .delete-offer-form {
             margin-top: 1.5rem;
         }
                 
-        /* Style for the delete button */
+
         .delete-btn {
             background-color: #ff3333;
             padding: 0.6rem 1.2rem;
@@ -477,7 +475,6 @@ $locations_result = $conn->query($locations_query);
         </div>
     </main>
 
-    <!-- Add Offer Modal -->
     <div id="addOfferModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -505,7 +502,7 @@ $locations_result = $conn->query($locations_query);
                     <label>Locations</label>
                     <div class="locations-checklist">
                         <?php 
-                        // Reset the pointer since we may have used locations_result earlier
+                        
                         $locations_result->data_seek(0); 
                         while ($location = $locations_result->fetch_assoc()): ?>
                             <div class="location-option">
@@ -528,7 +525,7 @@ $locations_result = $conn->query($locations_query);
  
 
     <script>
-        // Modal functionality
+        
         const modal = document.getElementById('addOfferModal');
         const addBtn = document.getElementById('addOfferBtn');
         const closeBtns = document.querySelectorAll('.close-modal');
