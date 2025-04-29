@@ -43,12 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $description = isset($data["description"]) ? $conn->real_escape_string($data["description"]) : "";
 
     if (!empty($data["id"])) {
-        // UPDATE existing movie
+        
         $id = intval($data["id"]);
         $stmt = $conn->prepare("UPDATE movies SET title = ?, genre = ?, duration = ?, rating = ?, cast = ?, description = ? WHERE id = ?");
         $stmt->bind_param("ssssssi", $title, $genre, $duration, $rating, $cast, $description, $id);
     } else {
-        // INSERT new movie
+       
         $stmt = $conn->prepare("INSERT INTO movies (title, genre, duration, rating, cast, description) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssss", $title, $genre, $duration, $rating, $cast, $description);
     }
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
-    // Try to get id from URL first
+    
     if (isset($_GET['id'])) {
         $id = intval($_GET['id']);
     } else {

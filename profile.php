@@ -6,12 +6,12 @@ ini_set('display_errors', 1);
 include 'db_connect.php';
 
 function deleteCard($conn, $cardId) {
-    // Prepare the SQL DELETE query
+
     $stmt = $conn->prepare("DELETE FROM cards WHERE id = ?");
-    $stmt->bind_param("i", $cardId);  // Bind the card ID
-    $success = $stmt->execute();      // Execute the query
-    $stmt->close();                   // Close the statement
-    return $success;                  // Return success or failure
+    $stmt->bind_param("i", $cardId);  
+    $success = $stmt->execute();      
+    $stmt->close();                  
+    return $success;                 
 }
 
 if (isset($_GET['delete_card_id'])) {
@@ -32,12 +32,12 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
-// Handle adding new card
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type']) && $_POST['form_type'] === 'add_card') {
     $cardNumber = $_POST['card_number'];
     $cardName = $_POST['card_name'];
     $expiry = $_POST['expiry'];
-    $cvv = $_POST['cvv']; // Note: consider not saving CVV to database for security.
+    $cvv = $_POST['cvv']; 
 
     $stmt = $conn->prepare("INSERT INTO cards (user_id, card_number, card_name, expiry, CVV) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("issss", $userId, $cardNumber, $cardName, $expiry, $cvv);
@@ -49,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type']) && $_POST
 }
 
 
-// Handle updating personal info
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['fname'])) {
     $firstName = $_POST["fname"];
     $lastName = $_POST["lname"];
@@ -83,14 +82,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['form_type'] === 'submit_rev
   $insert_stmt->execute();
   $insert_stmt->close();
 
-  // Refresh the page to show the new review
+
   header("Location: profile.php");
   exit();
 }
 
 
 
-// Fetch user info
+
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $userId);
 $stmt->execute();
@@ -273,7 +272,7 @@ $stmt->close();
   </style>
 </head>
 <body>
-    <!--header-->
+    
   <header>
     <div class="header-container">
       <a href="home.php" class="icon-btn"><i class="fas fa-home"></i></a>
@@ -282,7 +281,7 @@ $stmt->close();
     </div>
   </header>
 
-  <!--profile container-->
+
   <div class="profile-container">
     <div class="tabs">
       <button class="tab active" onclick="showTab('personal')">Personal Information</button>
@@ -291,7 +290,7 @@ $stmt->close();
     </div>
     
 
-    <!--personal information-->
+
 
     <div id="personal" class="tab-content active">
       <h2 class="section-title">Personal Information</h2>
@@ -318,20 +317,20 @@ $stmt->close();
 
 
 
-    <!--payment methods-->
+
     <div id="payment" class="tab-content">
       <h2 class="section-title">Payment Methods</h2>
       <form method="POST" action="profile.php" class="form-group">
         <input type="hidden" name="form_type" value="add_card">
 
         <div style="display: flex; gap: 1rem;">
-             <!-- card number -->
+        
             <div class="form-group" style="flex: 1;">
                 <label for="card_number">Card Number</label>
                 <input type="text" id="card_number" name="card_number" placeholder="1234 1234 1234 1234" required>
             </div>
 
-            <!-- card name -->
+         
             <div class="form-group" style="flex: 1;">
                 <label for="card_name">Name on Card</label>
                 <input type="text" id="card_name" name="card_name" required>
@@ -342,13 +341,13 @@ $stmt->close();
         
         <div style="display: flex; gap: 1rem;">
 
-          <!-- expiry date -->
+    
           <div class="form-group" style="flex: 1;">
             <label for="expiry">Expiry Date</label>
             <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required>
           </div>
 
-          <!-- cvv -->
+      
           <div class="form-group" style="flex: 1;">
             <label for="cvv">CVV</label>
             <input type="password" id="cvv" name="cvv" maxlength="3" required>
@@ -361,7 +360,7 @@ $stmt->close();
       <div style="margin-top: 2rem;">
             <h3>Saved Cards</h3>
             <?php
-            // Fetch saved cards for the current user
+           
             $userId = $_SESSION['user_id'];
             $stmt = $conn->prepare("SELECT * FROM cards WHERE user_id = ?");
             $stmt->bind_param("i", $userId);
@@ -461,7 +460,7 @@ $stmt->close();
             </div>
         ";
 
-        // ✅ OUTSIDE echo, check reviews
+      
         $review_stmt = $conn->prepare("SELECT * FROM reviews WHERE user_id = ? AND movie_id = ?");
         $review_stmt->bind_param("ii", $userId, $movie);
         $review_stmt->execute();
@@ -498,9 +497,9 @@ $stmt->close();
           </div> <!-- flex 1 close -->
         </div> <!-- ticket card close -->
         ";
-      } // ✅ THIS closes the while loop correctly!
+      } 
 
-      echo "</div>"; // close flex-wrap container
+      echo "</div>";
     } else {
       echo "<p>You haven't booked any tickets yet.</p>";
     }

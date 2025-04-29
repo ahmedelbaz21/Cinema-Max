@@ -148,13 +148,13 @@
 </nav>
 
 <div class="movie-container" id="movies">
-    <!-- Add Movie Card -->
+    
     <div class="movie-card" id="addMovie" onclick="openModal()">
         <div class="add-movie-card">+</div>
     </div>
 </div>
 
-<!-- Add Movie Modal -->
+
 <div id="movieModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -240,7 +240,7 @@
                         <div class="movie-card" id="addMovie" onclick="openModal()">
                             <div class="add-movie-card">+</div>
                         </div>`;
-                    fetchMovies(); // Refresh list
+                    fetchMovies(); 
                 } else {
                     alert("Error: " + data.message);
                 }
@@ -282,7 +282,7 @@
                     if (data.status === "success") {
                         alert("Movie deleted successfully!");
                         const movieCard = element.parentElement;
-                        movieCard.remove(); // Remove the movie card from the view
+                        movieCard.remove(); 
                     } else {
                         alert("Error: " + data.message);
                     }
